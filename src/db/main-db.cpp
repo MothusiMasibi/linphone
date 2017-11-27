@@ -1122,9 +1122,8 @@ MainDb::MainDb (const shared_ptr<Core> &core) : AbstractDb(*new MainDbPrivate), 
 				break;
 		}
 
-		tr.commit();
-
-		soFarSoGood = storageId >= 0;
+		if ((soFarSoGood = storageId >= 0))
+			tr.commit();
 
 		L_END_LOG_EXCEPTION
 
@@ -1371,7 +1370,7 @@ MainDb::MainDb (const shared_ptr<Core> &core) : AbstractDb(*new MainDbPrivate), 
 		if (getUnreadChatMessagesCount(chatRoomId) == 0)
 			return;
 
-		string query = "UPDATE FROM conference_chat_message_event"
+		string query = "UPDATE conference_chat_message_event"
 			"  SET state = " + Utils::toString(static_cast<int>(ChatMessage::State::Displayed)) + " ";
 		query += "WHERE";
 		if (chatRoomId.isValid())
