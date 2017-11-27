@@ -1671,6 +1671,11 @@ MainDb::MainDb (const shared_ptr<Core> &core) : AbstractDb(*new MainDbPrivate), 
 		);
 
 		soci::session *session = d->dbSession.getBackendSession<soci::session>();
+
+		*session << "DELETE FROM event WHERE id IN ("
+			"  SELECT event_id FROM conference_event WHERE chat_room_id = :chatRoomId"
+		")", soci::use(dbChatRoomId);
+
 		*session << "DELETE FROM chat_room WHERE id = :chatRoomId", soci::use(dbChatRoomId);
 
 		L_END_LOG_EXCEPTION
