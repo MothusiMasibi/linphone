@@ -477,8 +477,10 @@ MainDb::MainDb (const shared_ptr<Core> &core) : AbstractDb(*new MainDbPrivate), 
 				ContentType contentType(row.get<string>(2));
 				Content *content;
 
-				if (contentType == ContentType::FileTransfer)
+				if (contentType == ContentType::FileTransfer) {
+					hasFileTransferContent = true;
 					content = new FileTransferContent();
+				}
 				else if (contentType.isFile()) {
 					const long long &contentId = resolveId(row, 0);
 
